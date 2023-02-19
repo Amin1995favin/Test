@@ -32,3 +32,4 @@ jobs:
          git add -A
          git commit -m "GitHub Actions Results added"
          git push
+         
