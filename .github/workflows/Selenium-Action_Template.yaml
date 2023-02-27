@@ -1,24 +1,22 @@
 image: markhobson/maven-chrome
- 
 stages:
-  - test
- 
-# variables:
-#   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
- 
-test:
-  stage: test
-  allow_failure: true
- 
-# Run the tests  
+  - deploy
+  - confidence-check
+deploy_terraform:
+  stage: deploy
   script:
-    - mvn $MAVEN_OPTS clean package
-    - mvn compile test
- 
-# Store artifacts
-  artifacts:
-    when: always
-    name: "report"
-    paths:
-    - target/surefire-reports/*
-    expire_in: 1 h
+    # Your Review App deployment scripts - for a working example please check https://gitlab.com/Flockademic/Flockademic/blob/5a45f1c2412e93810fab50e2dab8949e2d0633c7/.gitlab-ci.yml#L315
+    - echo
+  environment: production
+e2e:firefox:
+  stage: confidence-check
+  services:
+    - selenium/standalone-firefox
+  script:
+    - npm run confidence-check --host=selenium__standalone-firefox
+e2e:chrome:
+  stage: confidence-check
+  services:
+    - selenium/standalone-chrome
+  script:
+    - npm run confidence-check --host=selenium__standalone-chrome
